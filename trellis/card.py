@@ -47,7 +47,6 @@ class Card:
         except Exception as e:
             print("Error: Could not add card ({})".format(e))
 
-
     def list(self, args=None):
         if utils.debug:
             print("Invoking card.list with {}".format(args))
@@ -88,7 +87,8 @@ class Card:
                     m_info.append(member_obj.username)
                 usernames_str = ", ".join(m for m in m_info)
                 table.add_row([card.id, card.name, card.due,
-                              card.is_due_complete, usernames_str, card.shortUrl])
+                              card.is_due_complete, usernames_str,
+                              card.shortUrl])
             print(table)
         except Exception as e:
             print("Error: Could not list cards ({})".format(e))

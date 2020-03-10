@@ -5,26 +5,54 @@
 # Copyright (C) 2020 Michael Davies <michael@the-davies.net>
 #
 
+import sys
 import os
 
 from trello import TrelloClient
 
 
-client = TrelloClient(
-  api_key=os.environ.get("TRELLO_API_KEY"),
-  api_secret=os.environ.get("TRELLO_API_SECRET")
-)
-
-# Need to do 2 things:
-# 1) copy the key from https://trello.com/app-key into TRELLO_API_KEY
-# 2) generate a token from the "Token" link on https://trello.com/app-key and
-#    put that into TRELLO_API_SECRET
-
-# TODO(mrda): Check to see if these things are in the environment and prompt
-#             the user to do stuff if they're not
-
-
 member_store = {}
+client = None
+
+
+def check_credentials():
+
+    global client
+
+    api_key = os.environ.get("TRELLO_API_KEY")
+    api_secret = os.environ.get("TRELLO_API_SECRET")
+    err = False
+
+    cmd = os.path.basename(sys.argv[0])
+
+    if api_key is None:
+        print("{}: You need to have the env variable TRELLO_API_KEY set"
+              .format(cmd))
+        print("You can get this from visiting https://trello.com/app-key and "
+              "copying the key")
+        print("into your shell, like this, 'export TRELLO_API_KEY=sjkfhksdhf"
+              "jksdhfkjsdhfk'")
+        print()
+        err = True
+
+    if api_secret is None:
+        print("{}: You need to have the env variable TRELLO_API_SECRET set"
+              .format(cmd))
+        print("You can get this from visiting https://trello.com/app-key, "
+              "generating a Token")
+        print("and copy that into your shell, like this,"
+              "'export TRELLO_API_SECRET=dkfjg9045jgl'")
+        print()
+        err = True
+
+    if err:
+        print("Exiting...")
+        sys.exit(1)
+
+    client = TrelloClient(
+        api_key=api_key,
+        api_secret=api_secret
+    )
 
 
 def get_boards():

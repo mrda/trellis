@@ -29,6 +29,7 @@ from trellis import board
 from trellis import card
 from trellis import command
 from trellis import trellislist
+from trellis import trello_if
 from trellis import utils
 
 
@@ -70,6 +71,9 @@ def display_version():
 
 
 def main():
+
+    # Ensure we have some credentials to use
+    trello_if.check_credentials()
 
     # Register commands
     b = board.Board()
