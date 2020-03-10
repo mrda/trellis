@@ -29,5 +29,11 @@ def get_boards():
     return boards
 
 
-def get_board(id):
-    return client.get_board(id)
+def get_board(board_id):
+    return client.get_board(board_id)
+
+
+def get_cards(list_id):
+    print("here + " + list_id)
+    tlist = client.get_list(list_id)
+    return tlist.list_cards()
