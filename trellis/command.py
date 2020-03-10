@@ -26,6 +26,7 @@ class Command:
 
     def __init__(self, name):
         self.commands = {}
+        self.default_func = None
         self.name = name
         self.add('help', self.help, '- Display help information')
 

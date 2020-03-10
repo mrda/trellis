@@ -19,27 +19,34 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # Or try here: http://www.fsf.org/copyleft/gpl.html
 
+import prettytable
+
 from trellis import command
 from trellis import config
+from trellis import trello_if
 from trellis import utils
 
 
-class Card:
-    """Representation of a Card"""
+class TrellisList:
+    """Representation of a List"""
 
     def __init__(self):
-        self.cmd = command.Command('card')
-        self.cmd.add('add', self.add, help_text="<card>")
-        self.cmd.add('list', self.list, help_text="- List all cards")
+        self.cmd = command.Command('list')
 
-    def add(self, args=None):
+    def default(self):
         if utils.debug:
-            print("Invoking card.add with {}".format(args))
-        print("Not yet implemented")
-
-    def list(self, args=None):
-        if utils.debug:
-            print("Invoking card.list with {}".format(args))
-        current_board_id = config.get_default_board[0]
-
-        print("Not yet implemented")
+            print("Invoking list default func")
+        try:
+            board_meta = config.get_default_board()
+            table = prettytable.PrettyTable()
+            table.field_names = ['id', 'name']
+            for f in table.field_names:
+                table.align[f] = 'l'
+            board_obj = trello_if.get_board(board_meta[0])
+            for lst in board_obj.all_lists():
+                if not lst.closed:
+                    table.add_row([lst.id, lst.name])
+            print("Board: {}".format(board_meta[1]))
+            print(table)
+        except Exception as e:
+            print("Error: Could not list all lists for board ({})".format(e))

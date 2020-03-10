@@ -28,6 +28,7 @@ import time
 from trellis import board
 from trellis import card
 from trellis import command
+from trellis import trellislist
 from trellis import utils
 
 
@@ -74,6 +75,10 @@ def main():
     b = board.Board()
     b.cmd.set_default(b.default)
     cmd.add('board', b.cmd.parse, help_text="<subcommand>")
+
+    tl = trellislist.TrellisList()
+    tl.cmd.set_default(tl.default)
+    cmd.add('list', tl.cmd.parse, help_text="<subcommand>")
 
     c = card.Card()
     cmd.add('card', c.cmd.parse, help_text="<subcommand>")
