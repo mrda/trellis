@@ -29,6 +29,9 @@ class Command:
         self.name = name
         self.add('help', self.help, '- Display help information')
 
+    def set_default(self, func):
+        self.default_func = func
+
     def add(self, command, func, help_text=None, valid_args=None):
         if utils.debug:
             print("Registering '{}' to {}".format(command, func))
@@ -40,9 +43,15 @@ class Command:
             print("\n")
 
     def parse(self, args=None):
-        # If we've been given no arguments, just display help
+
+        # Subcommands can be valid by themselves, but might not be.
+        # If a default_func has been set, we'll invoke it.
+        # TODO(mrda): Need an additional check for callable
         if args is None:
-            self.usage()
+            if self.default_func is not None:
+                self.default_func()
+            else:
+                self.usage()
             return
 
         # Parse what we've been given and try to invoke the registered function

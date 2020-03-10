@@ -20,7 +20,11 @@
 # Or try here: http://www.fsf.org/copyleft/gpl.html
 
 
+import prettytable
+
 from trellis import command
+from trellis import config
+from trellis import trello_if
 from trellis import utils
 
 
@@ -30,8 +34,51 @@ class Board:
     def __init__(self):
         self.cmd = command.Command('board')
         self.cmd.add('list', self.list, help_text="- List available boards")
+        self.cmd.add('set', self.set,
+                     help_text=" <board> - Set a default board")
 
     def list(self, args=None):
         if utils.debug:
             print("Invoking board.list with {}".format(args))
-        print("Not yet implemented")
+        try:
+            table = prettytable.PrettyTable()
+            table.field_names = ['id', 'name', 'url']
+            for f in table.field_names:
+                table.align[f] = 'l'
+            for board in trello_if.get_boards():
+                if not board.closed:
+                    table.add_row([board.id, board.name, board.url])
+            print(table)
+        except Exception as e:
+            print("Problem in list ({})".format(e))
+
+    def set(self, args):
+        if utils.debug:
+            print("Invoking board.set with {}".format(args))
+        if len(args) != 1:
+            print("Error: 'set' takes one parameter, the board name or id")
+            return
+        try:
+            search_board = args[0]
+            found_board = None
+            for board in trello_if.get_boards():
+                if search_board in [board.id, board.name]:
+                    found_board = board
+
+            if found_board is None:
+                print("Error: Could not match '{}' against your list of boards"
+                      .format(search_board))
+                return
+            config.set_default_board(found_board.id, found_board.name)
+
+        except Exception as e:
+            print("Error: Could not set default board ({})".format(e))
+
+    def default(self):
+        if utils.debug:
+            print("Invoking board default func")
+        try:
+            print(' '.join("'{}'".format(f) for f in
+                  config.get_default_board()))
+        except Exception as e:
+            print("Error: Could not get default board.  Have you set one?")

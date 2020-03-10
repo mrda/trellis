@@ -72,6 +72,7 @@ def main():
 
     # Register commands
     b = board.Board()
+    b.cmd.set_default(b.default)
     cmd.add('board', b.cmd.parse, help_text="<subcommand>")
 
     c = card.Card()
