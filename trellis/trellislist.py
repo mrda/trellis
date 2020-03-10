@@ -30,29 +30,58 @@ from trellis import utils
 class TrellisList:
     """Representation of a List"""
 
+    allowed_default_list = ["in_progress", "todo", "backlog"]
+
     def __init__(self):
         self.cmd = command.Command('list')
         self.cmd.add('set', self.set,
                      help_text=" <list> - Set a default list")
         self.cmd.add('list', self.list, help_text="- List available lists")
+        self.cmd.add('get', self.get,
+                     help_text="[<list name>] - List the default lists")
 
     def default(self):
         if utils.debug:
             print("Invoking list default func")
         try:
-            print(' '.join("'{}'".format(f) for f in
-                  config.get_default_list()))
+            table = prettytable.PrettyTable()
+            table.field_names = ['id', 'name']
+            for f in table.field_names:
+                table.align[f] = 'l'
+
+            for tlist in TrellisList.allowed_default_list:
+                if tlist == 'in_progress':
+                    list_meta = config.get_in_progress_list()
+                elif tlist == 'todo':
+                    list_meta = config.get_todo_list()
+                elif tlist == 'backlog':
+                    list_meta = config.get_backlog_list()
+                else:
+                    print("Error: Unknown default list category")
+                    return
+
+                if list_meta is None or list_meta[0] is None:
+                    print("Error: No such default list defined")
+                else:
+                    table.add_row([list_meta[0], list_meta[1]])
+            print(table)
+
         except Exception as e:
-            print("Error: Could not get default list.  Have you set one?")
+            print("Error: Could not get default list.  Have you set one? ({})"
+                  .format(e))
 
     def set(self, args):
         if utils.debug:
             print("Invoking list.set with {}".format(args))
-        if len(args) != 1:
-            print("Error: 'set' takes one parameter, the list name or id")
+        if len(args) != 2:
+            print("Error: 'set' takes two parameters, the list name or id")
             return
+        if args[0] not in TrellisList.allowed_default_list:
+            print("Error: list needs be be on of {}".format(", ".join("'{}'"
+                  .format(a) for a in TrellisList.allowed_default_list)))
         try:
-            search_list = args[0]
+            list_category = args[0]
+            search_list = args[1]
             found_list = None
 
             board_meta = config.get_default_board()
@@ -66,10 +95,49 @@ class TrellisList:
                 print("Error: Could not match '{}' against your list of lists"
                       .format(search_list))
                 return
-            config.set_default_list(found_list.id, found_list.name)
+
+            if list_category == 'in_progress':
+                config.set_in_progress_list(found_list.id, found_list.name)
+            elif list_category == 'todo':
+                config.set_todo_list(found_list.id, found_list.name)
+            elif list_category == 'backlog':
+                config.set_backlog_list(found_list.id, found_list.name)
+            else:
+                print("Error: Unknown default list category")
 
         except Exception as e:
             print("Error: Could not set default list ({})".format(e))
+
+    def get(self, args):
+        if utils.debug:
+            print("Invoking list.set with {}".format(args))
+        if len(args) != 1:
+            print("Error: 'set' takes one parameter, the list name or id")
+            return
+        if args[0] not in TrellisList.allowed_default_list:
+            print("Error: list needs be be on of {}".format(", ".join("'{}'"
+                  .format(a) for a in TrellisList.allowed_default_list)))
+            return
+        try:
+            list_category = args[0]
+            if list_category == 'in_progress':
+                list_meta = config.get_in_progress_list()
+            elif list_category == 'todo':
+                list_meta = config.get_todo_list()
+            elif list_category == 'backlog':
+                list_meta = config.get_backlog_list()
+            else:
+                print("Error: Unknown default list category")
+                return
+
+            if list_meta is None or list_meta[0] is None:
+                print("Error: No such default list defined")
+                return
+
+            print(' '.join("'{}'".format(f) for f in list_meta))
+
+        except Exception as e:
+            print("Error: Could not get default list ({})".format(e))
 
     def list(self, args=None):
         if utils.debug:

@@ -23,6 +23,7 @@ import prettytable
 
 from trellis import command
 from trellis import config
+from trellis import trellislist
 from trellis import trello_if
 from trellis import utils
 
@@ -47,13 +48,34 @@ class Card:
         if utils.debug:
             print("Invoking card.list with {}".format(args))
         try:
+
+            if args is None:
+                print("--- No list specified, defaulting to 'In Progress'")
+                curr_list_id = config.get_in_progress_list()[0]
+            elif (len(args) != 1 or
+                  args[0] not in trellislist.TrellisList.allowed_default_list):
+
+                print("Error: You need to provide a list name, one of {}"
+                      .format(", ".join("'{}'".format(a) for a in
+                              trellislist.TrellisList.allowed_default_list)))
+                return
+            elif args[0] == "in_progress":
+                curr_list_id = config.get_in_progress_list()[0]
+            elif args[0] == "todo":
+                curr_list_id = config.get_todo_list()[0]
+            elif args[0] == "backlog":
+                curr_list_id = config.get_backlog_list()[0]
+
+            if curr_list_id is None:
+                print("Error: Could not access list.  Have you set it?")
+                return
+
             table = prettytable.PrettyTable()
             table.field_names = ['id', 'name', 'due', 'due complete',
                                  'short url']
             for f in table.field_names:
                 table.align[f] = 'l'
 
-            curr_list_id = config.get_default_list()[0]
             cards = trello_if.get_cards(curr_list_id)
             for card in cards:
                 table.add_row([card.id, card.name, card.due,

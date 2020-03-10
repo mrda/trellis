@@ -15,7 +15,11 @@ import sys
 
 
 DEFAULT_BOARD = 'default_board'
-DEFAULT_LIST = 'default_list'
+
+BACKLOG_LIST = 'backlog_list'
+TODO_LIST = 'todo_list'
+IN_PROGRESS_LIST = 'in_progress_list'
+
 LAST_MODIFIED = 'last-modified'
 
 _user = os.environ.get('USER')
@@ -82,13 +86,46 @@ def get_default_board():
     return id, name
 
 
-def set_default_list(id, name):
-    d = {'id': id, 'name': name}
-    set(DEFAULT_LIST, d)
-
-
-def get_default_list():
+def get_backlog_list():
     _load()
-    id = _data[DEFAULT_LIST]['id']
-    name = _data[DEFAULT_LIST]['name']
-    return id, name
+    try:
+        id = _data[BACKLOG_LIST]['id']
+        name = _data[BACKLOG_LIST]['name']
+        return id, name
+    except KeyError:
+        return None, None
+
+
+def set_backlog_list(id, name):
+    d = {'id': id, 'name': name}
+    set(BACKLOG_LIST, d)
+
+
+def get_todo_list():
+    _load()
+    try:
+        id = _data[TODO_LIST]['id']
+        name = _data[TODO_LIST]['name']
+        return id, name
+    except KeyError:
+        return None, None
+
+
+def set_todo_list(id, name):
+    d = {'id': id, 'name': name}
+    set(TODO_LIST, d)
+
+
+def get_in_progress_list():
+    _load()
+    try:
+        id = _data[IN_PROGRESS_LIST]['id']
+        name = _data[IN_PROGRESS_LIST]['name']
+        return id, name
+    except KeyError:
+        return None, None
+
+
+def set_in_progress_list(id, name):
+    d = {'id': id, 'name': name}
+    set(IN_PROGRESS_LIST, d)
