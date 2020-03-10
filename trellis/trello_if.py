@@ -24,6 +24,9 @@ client = TrelloClient(
 #             the user to do stuff if they're not
 
 
+member_store = {}
+
+
 def get_boards():
     boards = client.list_boards()
     return boards
@@ -36,3 +39,12 @@ def get_board(board_id):
 def get_cards(list_id):
     tlist = client.get_list(list_id)
     return tlist.list_cards()
+
+
+def get_member_info(member_id):
+    try:
+        return member_store[member_id]
+    except KeyError:
+        member_obj = client.get_member(member_id)
+        member_store[member_id] = member_obj
+        return member_obj

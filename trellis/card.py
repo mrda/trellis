@@ -42,7 +42,11 @@ class Card:
     def add(self, args=None):
         if utils.debug:
             print("Invoking card.add with {}".format(args))
-        print("Not yet implemented")
+        try:
+            print("Not yet implemented")
+        except Exception as e:
+            print("Error: Could not add card ({})".format(e))
+
 
     def list(self, args=None):
         if utils.debug:
@@ -72,14 +76,19 @@ class Card:
 
             table = prettytable.PrettyTable()
             table.field_names = ['id', 'name', 'due', 'due complete',
-                                 'short url']
+                                 'members', 'short url']
             for f in table.field_names:
                 table.align[f] = 'l'
 
             cards = trello_if.get_cards(curr_list_id)
             for card in cards:
+                m_info = []
+                for m in card.member_ids:
+                    member_obj = trello_if.get_member_info(m)
+                    m_info.append(member_obj.username)
+                usernames_str = ", ".join(m for m in m_info)
                 table.add_row([card.id, card.name, card.due,
-                              card.is_due_complete, card.shortUrl])
+                              card.is_due_complete, usernames_str, card.shortUrl])
             print(table)
         except Exception as e:
             print("Error: Could not list cards ({})".format(e))
