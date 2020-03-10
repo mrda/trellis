@@ -32,17 +32,57 @@ class TrellisList:
 
     def __init__(self):
         self.cmd = command.Command('list')
+        self.cmd.add('set', self.set,
+                     help_text=" <list> - Set a default list")
+        self.cmd.add('list', self.list, help_text="- List available lists")
 
     def default(self):
         if utils.debug:
             print("Invoking list default func")
         try:
+            print(' '.join("'{}'".format(f) for f in
+                  config.get_default_list()))
+        except Exception as e:
+            print("Error: Could not get default list.  Have you set one?")
+
+    def set(self, args):
+        if utils.debug:
+            print("Invoking list.set with {}".format(args))
+        if len(args) != 1:
+            print("Error: 'set' takes one parameter, the list name or id")
+            return
+        try:
+            search_list = args[0]
+            found_list = None
+
             board_meta = config.get_default_board()
+            board_obj = trello_if.get_board(board_meta[0])
+
+            for tlist in board_obj.all_lists():
+                if search_list in [tlist.id, tlist.name]:
+                    found_list = tlist
+
+            if found_list is None:
+                print("Error: Could not match '{}' against your list of lists"
+                      .format(search_list))
+                return
+            config.set_default_list(found_list.id, found_list.name)
+
+        except Exception as e:
+            print("Error: Could not set default list ({})".format(e))
+
+    def list(self, args=None):
+        if utils.debug:
+            print("Invoking list.list with {}".format(args))
+        try:
+            board_meta = config.get_default_board()
+            board_obj = trello_if.get_board(board_meta[0])
+
             table = prettytable.PrettyTable()
             table.field_names = ['id', 'name']
             for f in table.field_names:
                 table.align[f] = 'l'
-            board_obj = trello_if.get_board(board_meta[0])
+
             for lst in board_obj.all_lists():
                 if not lst.closed:
                     table.add_row([lst.id, lst.name])

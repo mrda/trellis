@@ -15,6 +15,7 @@ import sys
 
 
 DEFAULT_BOARD = 'default_board'
+DEFAULT_LIST = 'default_list'
 LAST_MODIFIED = 'last-modified'
 
 _user = os.environ.get('USER')
@@ -78,4 +79,16 @@ def get_default_board():
     _load()
     id = _data[DEFAULT_BOARD]['id']
     name = _data[DEFAULT_BOARD]['name']
+    return id, name
+
+
+def set_default_list(id, name):
+    d = {'id': id, 'name': name}
+    set(DEFAULT_LIST, d)
+
+
+def get_default_list():
+    _load()
+    id = _data[DEFAULT_LIST]['id']
+    name = _data[DEFAULT_LIST]['name']
     return id, name
