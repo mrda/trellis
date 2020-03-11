@@ -21,13 +21,13 @@
 
 import prettytable
 
-from trellis import command
-from trellis import config
-from trellis import trello_if
-from trellis import utils
+from trellotool import command
+from trellotool import config
+from trellotool import trello_if
+from trellotool import utils
 
 
-class TrellisList:
+class TrelloList:
     """Representation of a List"""
 
     allowed_default_list = ["in_progress", "todo", "backlog"]
@@ -50,7 +50,7 @@ class TrellisList:
             for f in table.field_names:
                 table.align[f] = 'l'
 
-            for tlist in TrellisList.allowed_default_list:
+            for tlist in TrelloList.allowed_default_list:
                 if tlist == 'in_progress':
                     list_meta = config.get_in_progress_list()
                 elif tlist == 'todo':
@@ -77,9 +77,9 @@ class TrellisList:
         if len(args) != 2:
             print("Error: 'set' takes two parameters, the list name or id")
             return
-        if args[0] not in TrellisList.allowed_default_list:
+        if args[0] not in TrelloList.allowed_default_list:
             print("Error: list needs be be on of {}".format(", ".join("'{}'"
-                  .format(a) for a in TrellisList.allowed_default_list)))
+                  .format(a) for a in TrelloList.allowed_default_list)))
         try:
             list_category = args[0]
             search_list = args[1]
@@ -115,9 +115,9 @@ class TrellisList:
         if len(args) != 1:
             print("Error: 'set' takes one parameter, the list name or id")
             return
-        if args[0] not in TrellisList.allowed_default_list:
+        if args[0] not in TrelloList.allowed_default_list:
             print("Error: list needs be be on of {}".format(", ".join("'{}'"
-                  .format(a) for a in TrellisList.allowed_default_list)))
+                  .format(a) for a in TrelloList.allowed_default_list)))
             return
         try:
             list_category = args[0]

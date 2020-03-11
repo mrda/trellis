@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# trellis.py - an CLI for trello
+# trello.py - an CLI for trello
 #
 # Copyright (C) 2020 Michael Davies <michael@the-davies.net>
 #
@@ -25,12 +25,12 @@ import pkg_resources
 import sys
 import time
 
-from trellis import board
-from trellis import card
-from trellis import command
-from trellis import trellislist
-from trellis import trello_if
-from trellis import utils
+from trellotool import board
+from trellotool import card
+from trellotool import command
+from trellotool import trellolist
+from trellotool import trello_if
+from trellotool import utils
 
 
 my_name = os.path.basename(sys.argv[0])
@@ -80,7 +80,7 @@ def main():
     b.cmd.set_default(b.default)
     cmd.add('board', b.cmd.parse, help_text="<subcommand>")
 
-    tl = trellislist.TrellisList()
+    tl = trellolist.TrelloList()
     tl.cmd.set_default(tl.default)
     cmd.add('list', tl.cmd.parse, help_text="<subcommand>")
 

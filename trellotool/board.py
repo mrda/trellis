@@ -22,10 +22,10 @@
 
 import prettytable
 
-from trellis import command
-from trellis import config
-from trellis import trello_if
-from trellis import utils
+from trellotool import command
+from trellotool import config
+from trellotool import trello_if
+from trellotool import utils
 
 
 class Board:

@@ -1,5 +1,5 @@
 #
-# trellis top-level Makefile
+# trellotool top-level Makefile
 #
 # Copyright (C) 2020 Michael Davies <michael@the-davies.net>
 #
@@ -30,10 +30,10 @@ install:
 	pip install --user -Ur requirements.txt .
 
 uninstall:
-	pip uninstall trellis
+	pip uninstall trellotool
 
 check:
-	pycodestyle --show-source trellis tests
+	pycodestyle --show-source trellotool tests
 
 changes:
 	@if [ ! "z$(GIT_CHANGES)" = "z" ]; then \
@@ -45,7 +45,7 @@ changes:
     else true; fi
 
 tests:
-	${NOSE} -s --with-coverage --cover-branches --cover-erase --cover-html --cover-package=trellis
+	${NOSE} -s --with-coverage --cover-branches --cover-erase --cover-html --cover-package=trellotool
 
 cover:
 	xdg-open cover/index.html

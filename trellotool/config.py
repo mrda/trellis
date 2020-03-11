@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# config.py - data storage for trellis
+# config.py - data storage for trellotool
 #
 # Copyright (C) 2020 Michael Davies <michael@the-davies.net>
 #

@@ -1,5 +1,5 @@
-trellis
-=======
+trellotool
+==========
 An experiment in building a CLI for trello
 
 Development Installation
@@ -11,8 +11,8 @@ You should run this in a venv. Do something like this:
 $ python3 -m venv ~/venv3
 $ . ~/venv3/bin/activate
 $ mkdir -p ~/src
-$ git clone https://github.com/mrda/trellis.git
-$ cd trellis
+$ git clone https://github.com/mrda/trellotool.git
+$ cd trellotool
 $ pip install -U pip
 $ pip install -Ur requirements.txt
 $ pip install -e .
@@ -24,19 +24,19 @@ Installing a Release
 That's what pypi is for!
 
 ```
-$ pip install --user trellis
+$ pip install --user trellotool
 ```
 
 Usage
 =====
 Trellis has the concept of boards, lists and cards.  Cards as part of lists, and lists are part of boards.  To start with, you need to define which board you want to use by default, and what lists are used for what things.  This is how you do that:
 ```
-$ trellis board list # this will show you all the boards you have available to access
-$ trellis board set 5d718f75a279e72b4a96baca # this sets a default board
+$ trellotool board list # this will show you all the boards you have available to access
+$ trellotool board set 5d718f75a279e72b4a96baca # this sets a default board
 ```
 Now, let's see what lists are defined on your board, and define which boards are which:
 ```
-$ trellis list list
+$ trellotool list list
 Board: Your Board Name
 +--------------------------+-------------------+
 | id                       | name              |
@@ -49,13 +49,13 @@ Board: Your Board Name
 | 5d718fa5a279e7274a9ebacd | Done              |
 | 5e6021f2206bff6e61047d01 | Ready to archive? |
 +--------------------------+-------------------+
-$ trellis list set todo 5d718975a279e7274a9ebacb
-$ trellis list set backlog 5d7191360fd4b323358fc535
-$ trellis list set in_progress 5d718975a279e7274a9ebacc
+$ trellotool list set todo 5d718975a279e7274a9ebacb
+$ trellotool list set backlog 5d7191360fd4b323358fc535
+$ trellotool list set in_progress 5d718975a279e7274a9ebacc
 ```
 This completes the setup we need to do.  To see what cards are available on each of your boards, you can do this:
 ```
-$ trellis card list todo
+$ trellotool card list todo
 +--------------------------+--------------------------------------------------------------------------------------+------+--------------+-----------------+-------------------------------+
 | id                       | name                                                                                 | due  | due complete | members         | short url                     |
 +--------------------------+--------------------------------------------------------------------------------------+------+--------------+-----------------+-------------------------------+
@@ -71,21 +71,21 @@ and you can do the same for other boards, by replacing "todo" with either "in_pr
 
 Next step is to add some cards to a board:
 ```
-$ trellis card add "Add F30 support to mongrel-punt"
+$ trellotool card add "Add F30 support to mongrel-punt"
 ```
 And if you're ever uncertain about what commands are available, or what parameters they require, you can just append 'help' on the end of any command or subcommand for assistance.  i.e.
 ```
-$ trellis help
-Available commands for trellis are: board, card, help, list
+$ trellotool help
+Available commands for trellotool are: board, card, help, list
 board <subcommand>
 card <subcommand>
 help - Display help information
 list <subcommand>
-$ trellis card help
+$ trellotool card help
 Available commands for card are: add, help, list
 add [-e] <card title> [<list>] - Add a new card to your list, defaults to <backlog> if not specified, optionally allowing you to edit the description of the new card
 help - Display help information
 list - List all cards for the current list
-$ trellis card add
+$ trellotool card add
 [-e] <card title> [<list>] - Add a new card to your list, defaults to <backlog> if not specified, optionally allowing you to edit the description of the new card
 ```

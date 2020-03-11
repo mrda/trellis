@@ -10,7 +10,7 @@ import os
 
 from trello import TrelloClient
 
-from trellis import config
+from trellotool import config
 
 
 member_store = {}

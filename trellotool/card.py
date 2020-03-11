@@ -21,11 +21,11 @@
 
 import prettytable
 
-from trellis import command
-from trellis import config
-from trellis import trellislist
-from trellis import trello_if
-from trellis import utils
+from trellotool import command
+from trellotool import config
+from trellotool import trellolist
+from trellotool import trello_if
+from trellotool import utils
 
 
 class Card:
@@ -75,7 +75,7 @@ class Card:
 
             # Default params
             launch_editor = False
-            tlist = trellislist.TrellisList.default_list_for_addition
+            tlist = trellolist.TrelloList.default_list_for_addition
             title = None
             description = ""
             found_title = False
@@ -87,7 +87,7 @@ class Card:
             for arg in args:
                 if arg == '-e':
                     launch_editor = True
-                elif arg in trellislist.TrellisList.allowed_default_list:
+                elif arg in trellolist.TrelloList.allowed_default_list:
                     tlist = arg
                 else:
                     # Only option left is that this is a title
@@ -99,10 +99,10 @@ class Card:
                         unknown_param = True
 
             # There are a limited set of arguments allowed, they are:
-            # 1) trellis add title
-            # 2) trellis add -e title
-            # 3) trellis add title tlist
-            # 4) trellis add -e title tlist
+            # 1) trellotool add title
+            # 2) trellotool add -e title
+            # 3) trellotool add title tlist
+            # 4) trellotool add -e title tlist
             # i.e. title is mandatory
             if title is None or unknown_param:
                 self.cmd.usage_for_cmd('add')
@@ -131,11 +131,11 @@ class Card:
                 print("--- No list specified, defaulting to 'In Progress'")
                 curr_list_id = config.get_in_progress_list()[0]
             elif (len(args) != 1 or
-                  args[0] not in trellislist.TrellisList.allowed_default_list):
+                  args[0] not in trellolist.TrelloList.allowed_default_list):
 
                 print("Error: You need to provide a list name, one of {}"
                       .format(", ".join("'{}'".format(a) for a in
-                              trellislist.TrellisList.allowed_default_list)))
+                              trellolist.TrelloList.allowed_default_list)))
                 return
             elif args[0] == "in_progress":
                 curr_list_id = config.get_in_progress_list()[0]

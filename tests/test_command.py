@@ -1,5 +1,5 @@
 import unittest
-import trellis.command
+import trellotool.command
 
 
 class TestCommand(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestCommand(unittest.TestCase):
         def _dummy():
             pass
 
-        c = trellis.command.Command("baz")
+        c = trellotool.command.Command("baz")
         c.add("fred", _dummy, "foo", "bar")
         self.assertEqual("baz", c.name)
         self.assertEqual(_dummy, c.commands["fred"]["func"])

@@ -19,7 +19,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # Or try here: http://www.fsf.org/copyleft/gpl.html
 
-from trellis import utils
+from trellotool import utils
 
 
 class Command:
