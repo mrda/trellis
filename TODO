@@ -1,0 +1,16 @@
+Move cards between lists, with error checking "trellotool card move <uuid> <list>"
+Archive cards "trellotool card archive <uuid>"
+Display labels on cards "trellotool card show <uuid>"
+Display attachments on cards "trellotool card show attachments <uuid>"
+Display attachments on cards "trellotool card show <uuid> --all"
+Add/Remove attachments on cards "trellotool card <uuid> attachment add/delete <url>"
+Work out how actions on cards could be implemented
+Add/remove members on cards "trellotool card add/remove member mrda"
+Add descriptions to cards "trellotool card <uuid> description <text>" (what to do if a description already exists?)
+View comments on cards "trellotool card show comments <uuid>"
+View comments on cards "trellotool card show <uuid> --all"
+Handle checklists on cards (viewing, addition, deletion, ticking, unticking)
+Add/Delete/View labels
+Show cards assigned to me
+Show cards that are overdue/coming up to due date
+Watch/unwatch cards "trellotool card watch/unwatch <uuid>"
