@@ -16,9 +16,9 @@ import sys
 
 DEFAULT_BOARD = 'default_board'
 
-BACKLOG_LIST = 'backlog_list'
-TODO_LIST = 'todo_list'
-IN_PROGRESS_LIST = 'in_progress_list'
+BACKLOG_LIST = 'backlog'
+TODO_LIST = 'todo'
+IN_PROGRESS_LIST = 'in_progress'
 
 LAST_MODIFIED = 'last-modified'
 
@@ -129,3 +129,15 @@ def get_in_progress_list():
 def set_in_progress_list(id, name):
     d = {'id': id, 'name': name}
     set(IN_PROGRESS_LIST, d)
+
+
+def get_list_id_by_name(name):
+    _load()
+    for elem in _data:
+        try:
+            if elem == name:
+                return _data[elem]['id']
+        except Exception as e:
+            # Some elements won't have the required fields, so we can just skip
+            pass
+    return None

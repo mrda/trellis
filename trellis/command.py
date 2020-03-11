@@ -92,6 +92,9 @@ class Command:
         print("Available commands for {} are: {}".
               format(self.name, ', '.join(k for k in sorted(self.commands))))
 
+    def usage_for_cmd(self, cmd):
+        print(self.commands[cmd]['help_text'])
+
     def get_commands(self):
         return sorted(self.commands.keys())
 

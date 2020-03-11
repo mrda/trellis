@@ -33,9 +33,34 @@ class Card:
     https://developers.trello.com/reference/#card-object
     """
 
+    card_explanation = \
+        ("#\n"
+         "# This is the description section of your new ticket.  You can use\n"
+         "# Markdown here.  For example:\n"
+         "#\n"
+         "# This is a First Level Header\n"
+         "# ============================\n"
+         "#\n"
+         "# This is a Second Level Header\n"
+         "# -----------------------------\n"
+         "#\n"
+         "# You can **Bold** things, _underline_ things, and add *emphasis*\n"
+         "#\n"
+         "# This is a list:\n"
+         "# - spam\n"
+         "# - eggs\n"
+         "# - bacon, and\n"
+         "# - spam\n"
+         "#\n"
+         "# Want more [spam](https://www.dailymotion.com/video/x2hwqlw)?\n")
+
     def __init__(self):
         self.cmd = command.Command('card')
-        self.cmd.add('add', self.add, help_text="<card>")
+        self.cmd.add('add', self.add,
+                     help_text=("[-e] <card title> [<list>] - Add a new card"
+                                " to your list, defaults to <backlog> if not"
+                                " specified, optionally allowing you to edit"
+                                " the description of the new card"))
         self.cmd.add('list', self.list,
                      help_text="- List all cards for the current list")
 
@@ -43,7 +68,57 @@ class Card:
         if utils.debug:
             print("Invoking card.add with {}".format(args))
         try:
-            print("Not yet implemented")
+
+            if args is None or len(args) < 1 or len(args) > 3:
+                self.cmd.usage_for_cmd('add')
+                return
+
+            # Default params
+            launch_editor = False
+            tlist = trellislist.TrellisList.default_list_for_addition
+            title = None
+            description = ""
+            found_title = False
+            unknown_param = False
+
+            # Time to parse arguments.  Note that the valid options are:
+            # [-e] <card title> [<tlist>]
+            # i.e. '-e' and '<tlist>' are optional
+            for arg in args:
+                if arg == '-e':
+                    launch_editor = True
+                elif arg in trellislist.TrellisList.allowed_default_list:
+                    tlist = arg
+                else:
+                    # Only option left is that this is a title
+                    if not found_title:
+                        title = arg
+                        found_title = True
+                    else:
+                        print("Unknown parameter")
+                        unknown_param = True
+
+            # There are a limited set of arguments allowed, they are:
+            # 1) trellis add title
+            # 2) trellis add -e title
+            # 3) trellis add title tlist
+            # 4) trellis add -e title tlist
+            # i.e. title is mandatory
+            if title is None or unknown_param:
+                self.cmd.usage_for_cmd('add')
+                return
+
+            if launch_editor:
+                description = \
+                    utils.launch_editor_with_explanation(Card.card_explanation)
+
+            if utils.debug:
+                print("title is '{}'".format(title))
+                print("tlist is '{}'".format(tlist))
+                print("description is '{}'".format(description))
+
+            trello_if.add_card(tlist, title, description)
+
         except Exception as e:
             print("Error: Could not add card ({})".format(e))
 

@@ -31,6 +31,7 @@ class TrellisList:
     """Representation of a List"""
 
     allowed_default_list = ["in_progress", "todo", "backlog"]
+    default_list_for_addition = "backlog"
 
     def __init__(self):
         self.cmd = command.Command('list')

@@ -10,6 +10,8 @@ import os
 
 from trello import TrelloClient
 
+from trellis import config
+
 
 member_store = {}
 client = None
@@ -76,3 +78,15 @@ def get_member_info(member_id):
         member_obj = client.get_member(member_id)
         member_store[member_id] = member_obj
         return member_obj
+
+
+def add_card(tlist_name, card_title, card_description):
+    tlist_id = config.get_list_id_by_name(tlist_name)
+
+    if tlist_id is None:
+        print("Error: Couldn't not find list, so can't add card")
+        sys.exit(2)
+
+    tlist = client.get_list(tlist_id)
+    tlist.add_card(name=card_title,
+                   desc=card_description)
