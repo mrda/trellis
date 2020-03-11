@@ -5,7 +5,6 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='trellis',
-    packages=['trellis'],
     version='0.0.1',
     licence='GNU General Public License v3',
     author='Michael Davies',
