@@ -188,9 +188,9 @@ class Card:
             table.add_row(["id", args[0]])
             table.add_row(["last activity", card.date_last_activity])
             # table.add_row(["pos", card.pos])
-            table.add_row(["shortUrl", card.shortUrl])
+            table.add_row(["short url", card.shortUrl])
             # table.add_row(["url", card.url])
-            table.add_row(["desc", card.desc])
+            table.add_row(["description", card.desc])
             table.add_row(["due", card.due])
             table.add_row(["is due complete", card.is_due_complete])
 
@@ -202,9 +202,9 @@ class Card:
             table.add_row(["members", ", ".join(m for m in members)])
 
             # table.add_row(["idLabels", card.idLabels])
-            table.add_row(["idBoard", card.idBoard])
-            table.add_row(["idList", card.idList])
-            table.add_row(["idShort", card.idShort])
+            table.add_row(["board", trello_if.get_board(card.idBoard).name])
+            table.add_row(["list", trello_if.get_list(card.idList).name])
+            # table.add_row(["idShort", card.idShort])
             # table.add_row(["badges", card.badges])
             print(table)
 

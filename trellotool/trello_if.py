@@ -66,6 +66,10 @@ def get_board(board_id):
     return client.get_board(board_id)
 
 
+def get_list(list_id):
+    return client.get_list(list_id)
+
+
 def get_cards(list_id):
     tlist = client.get_list(list_id)
     return tlist.list_cards()
