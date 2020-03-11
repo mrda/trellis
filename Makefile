@@ -54,3 +54,6 @@ clean:
 	find . -iname "*.pyc" -o -iname "*.pyo" -o -iname "*.so" \
            -o -iname "#*#" -delete
 
+release:
+	python setup.py sdist
+	twine upload dist/*
