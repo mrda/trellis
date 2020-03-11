@@ -14,6 +14,7 @@ setuptools.setup(
         "prettytable",
         "py-trello",
     ],
+    download_url='https://github.com/mrda/trellis/archive/0.0.1.tar.gz',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/mrda/trellis',
