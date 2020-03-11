@@ -25,8 +25,6 @@ That's what pypi is for!
 
 ```
 $ pip install --user trellis
-# Note: This will only work once a release is pushed to pypi :-)
-# For now, use the Development Installation
 ```
 
 Usage
@@ -71,4 +69,23 @@ $ trellis card list todo
 ```
 and you can do the same for other boards, by replacing "todo" with either "in_progress" or "backlog".
 
-TODO: Need to add the ability to add cards to one of the boards, by default it should go to backlog.
+Next step is to add some cards to a board:
+```
+$ trellis card add "Add F30 support to mongrel-punt"
+```
+And if you're ever uncertain about what commands are available, or what parameters they require, you can just append 'help' on the end of any command or subcommand for assistance.  i.e.
+```
+$ trellis help
+Available commands for trellis are: board, card, help, list
+board <subcommand>
+card <subcommand>
+help - Display help information
+list <subcommand>
+$ trellis card help
+Available commands for card are: add, help, list
+add [-e] <card title> [<list>] - Add a new card to your list, defaults to <backlog> if not specified, optionally allowing you to edit the description of the new card
+help - Display help information
+list - List all cards for the current list
+$ trellis card add
+[-e] <card title> [<list>] - Add a new card to your list, defaults to <backlog> if not specified, optionally allowing you to edit the description of the new card
+```

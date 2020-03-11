@@ -5,10 +5,16 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='trellis',
+    packages=['trellis'],
     version='0.0.1',
+    licence='GNU General Public License v3',
     author='Michael Davies',
     author_email='michael@the-davies.net',
     description='A CLI for trello',
+    install_requires=[
+        "prettytable",
+        "py-trello",
+    ],
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/mrda/trellis',
