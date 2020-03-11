@@ -42,6 +42,7 @@ class TrelloList:
                      help_text="[<list name>] - List the default lists")
 
     def default(self):
+        error = False
         if utils.debug:
             print("Invoking list default func")
         try:
@@ -62,13 +63,16 @@ class TrelloList:
                     return
 
                 if list_meta is None or list_meta[0] is None:
-                    print("Error: No such default list defined")
+                    print("Error: No such default list '{}' defined"
+                          .format(tlist))
+                    error = True
                 else:
                     table.add_row([list_meta[0], list_meta[1]])
-            print(table)
+            if not error:
+                print(table)
 
         except Exception as e:
-            print("Error: Could not get default list.  Have you set one? ({})"
+            print("Error: Problem listing defaults lists.  Have you set them? ({})"
                   .format(e))
 
     def set(self, args):
@@ -145,6 +149,9 @@ class TrelloList:
             print("Invoking list.list with {}".format(args))
         try:
             board_meta = config.get_default_board()
+            if board_meta is None or board_meta[0] is None:
+                print("Error: No default board set")
+                return
             board_obj = trello_if.get_board(board_meta[0])
 
             table = prettytable.PrettyTable()

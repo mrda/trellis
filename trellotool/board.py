@@ -78,7 +78,10 @@ class Board:
         if utils.debug:
             print("Invoking board default func")
         try:
-            print(' '.join("'{}'".format(f) for f in
-                  config.get_default_board()))
+            board_meta = config.get_default_board()
+            if board_meta is None or board_meta[0] is None:
+                print("Error: No default board set")
+                return
+            print(' '.join("'{}'".format(f) for f in board_meta))
         except Exception as e:
             print("Error: Could not get default board.  Have you set one?")

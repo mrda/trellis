@@ -81,9 +81,12 @@ def set_default_board(id, name):
 
 def get_default_board():
     _load()
-    id = _data[DEFAULT_BOARD]['id']
-    name = _data[DEFAULT_BOARD]['name']
-    return id, name
+    try:
+        id = _data[DEFAULT_BOARD]['id']
+        name = _data[DEFAULT_BOARD]['name']
+        return id, name
+    except KeyError:
+        return None, None
 
 
 def get_backlog_list():
