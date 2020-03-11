@@ -72,8 +72,8 @@ class TrelloList:
                 print(table)
 
         except Exception as e:
-            print("Error: Problem listing defaults lists.  Have you set them? ({})"
-                  .format(e))
+            print(("Error: Problem listing defaults lists."
+                   "Have you set them? ({})".format(e)))
 
     def set(self, args):
         if utils.debug:
