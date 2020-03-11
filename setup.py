@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='trellotool',
-    version='0.0.1',
+    version='0.0.2',
     licence='GNU General Public License v3',
     author='Michael Davies',
     author_email='michael@the-davies.net',

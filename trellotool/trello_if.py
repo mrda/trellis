@@ -90,3 +90,7 @@ def add_card(tlist_name, card_title, card_description):
     tlist = client.get_list(tlist_id)
     tlist.add_card(name=card_title,
                    desc=card_description)
+
+
+def get_card(card_id):
+    return client.get_card(card_id)

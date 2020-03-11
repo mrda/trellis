@@ -63,6 +63,8 @@ class Card:
                                 " the description of the new card"))
         self.cmd.add('list', self.list,
                      help_text="- List all cards for the current list")
+        self.cmd.add('show', self.show,
+                     help_text="<card-id> - Show card fields")
 
     def add(self, args=None):
         if utils.debug:
@@ -167,3 +169,44 @@ class Card:
             print(table)
         except Exception as e:
             print("Error: Could not list cards ({})".format(e))
+
+    def show(self, args=None):
+        if utils.debug:
+            print("Invoking card.show with {}".format(args))
+        try:
+            if args is None or len(args) != 1:
+                print("Error: No card specified")
+                return
+
+            card = trello_if.get_card(args[0])
+
+            table = prettytable.PrettyTable()
+            table.field_names = ['field', 'value']
+            for f in table.field_names:
+                table.align[f] = 'l'
+            table.add_row(["name", card.name])
+            table.add_row(["id", args[0]])
+            table.add_row(["last activity", card.date_last_activity])
+            # table.add_row(["pos", card.pos])
+            table.add_row(["shortUrl", card.shortUrl])
+            # table.add_row(["url", card.url])
+            table.add_row(["desc", card.desc])
+            table.add_row(["due", card.due])
+            table.add_row(["is due complete", card.is_due_complete])
+
+            members = []
+            table.add_row(["closed", card.closed])
+            for m in card.member_ids:
+                member = trello_if.get_member_info(m)
+                members.append(member.username)
+            table.add_row(["members", ", ".join(m for m in members)])
+
+            # table.add_row(["idLabels", card.idLabels])
+            table.add_row(["idBoard", card.idBoard])
+            table.add_row(["idList", card.idList])
+            table.add_row(["idShort", card.idShort])
+            # table.add_row(["badges", card.badges])
+            print(table)
+
+        except Exception as e:
+            print("Error: Could not show card ({})".format(e))
