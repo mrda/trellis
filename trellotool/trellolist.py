@@ -188,6 +188,7 @@ class TrelloList:
                 elif len(candidates) > 1:
                     if utils.debug:
                         print("*** Multiple matches for {}".format(thing))
+                    return None
 
             if tlist_id is None:
                 # i.e. Must be an id by itself
