@@ -92,6 +92,11 @@ $ trellotool card show 5d726e09da03b65fac9972f1
 | members         | jeremiahthefrog                                                       |
 +-----------------+-----------------------------------------------------------------------+
 ```
+You can also move cards between lists, with support for list aliases:
+```
+trellotool card move 5e30901187796e2335676f06 todo
+trellotool card move 5e30901187796e2335676f06 5d718fa5a279e7274a9ebacd # move to the Done list
+```
 Getting Help
 ------------
 If you're ever uncertain about what commands are available, or what parameters they require, you can just append 'help' on the end of any command or subcommand for assistance.  i.e.
