@@ -29,7 +29,7 @@ $ pip install --user trellotool
 
 Usage
 =====
-Trellis has the concept of boards, lists and cards.  Cards as part of lists, and lists are part of boards.  To start with, you need to define which board you want to use by default, and what lists are used for what things.  This is how you do that:
+Trellotool has the concept of boards, lists and cards.  Cards as part of lists, and lists are part of boards.  To start with, you need to define which board you want to use by default, and what lists are used for what things.  This is how you do that:
 ```
 $ trellotool board list # this will show you all the boards you have available to access
 $ trellotool board set 5d718f75a279e72b4a96baca # this sets a default board
