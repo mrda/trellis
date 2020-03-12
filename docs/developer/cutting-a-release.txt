@@ -1,0 +1,17 @@
+To cut a release you need to do the following:
+
+1) Ensure there's no pycodestyle warnings, and all tests pass.  You do this by running 'make' in the top-level directory
+
+2) Ensure setup.py is up to date, what this means is:
+2.1) Increase the version identifier appropriately, following semantic versioning (https://semver.org/)
+2.2) Update the download_url so it matches the new version
+2.3) Commit this change to setup.py and push to github
+
+3) Visit https://github.com/mrda/trellotool/releases
+3.1) Click on "Draft a new release", specifying the "Tag version" that matches what you added to setup.py, and providing a "Release Title" and fill in the "Describe this release" text box.  If we're still pre-1.0 make sure you click the "This is a pre-release" checkbox to help set expectations correctly.
+3.2) Back in your development environment, you want to get the new tag into your git history, so do a "git remote update", followed by a "git log" to verify the right commit has been tagged.
+
+4) Time to cut a release for pypi
+4.1) Back in your development environment, cut the release, "make release".  You'll need to provide you pypi username and password.
+4.2) Visit https://pypi.org/project/trellotool/ and verify that the latest release is the one you just created
+
