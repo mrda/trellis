@@ -104,13 +104,7 @@ def get_default_board():
 
 
 def get_backlog_list():
-    _load()
-    try:
-        id = _data[BACKLOG_LIST]['id']
-        name = _data[BACKLOG_LIST]['name']
-        return id, name
-    except KeyError:
-        return None, None
+    return get_list_meta_by_name(BACKLOG_LIST)
 
 
 def set_backlog_list(id, name):
@@ -119,13 +113,7 @@ def set_backlog_list(id, name):
 
 
 def get_todo_list():
-    _load()
-    try:
-        id = _data[TODO_LIST]['id']
-        name = _data[TODO_LIST]['name']
-        return id, name
-    except KeyError:
-        return None, None
+    return get_list_meta_by_name(TODO_LIST)
 
 
 def set_todo_list(id, name):
@@ -134,13 +122,7 @@ def set_todo_list(id, name):
 
 
 def get_in_progress_list():
-    _load()
-    try:
-        id = _data[IN_PROGRESS_LIST]['id']
-        name = _data[IN_PROGRESS_LIST]['name']
-        return id, name
-    except KeyError:
-        return None, None
+    return get_list_meta_by_name(IN_PROGRESS_LIST)
 
 
 def set_in_progress_list(id, name):
