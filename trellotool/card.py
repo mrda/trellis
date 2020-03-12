@@ -57,16 +57,22 @@ class Card:
     def __init__(self):
         self.cmd = command.Command('card')
         self.cmd.add('add', self.add,
-                     help_text=("[-e] <card title> [<list>] - Add a new card"
-                                " to your list, defaults to <backlog> if not"
-                                " specified, optionally allowing you to edit"
-                                " the description of the new card"))
+                     help_text=(("[-e] <card title> [<list-alias> | <list-id>]"
+                                 " - Add a new card to an optionally specified"
+                                 " <list-alias> or <list-id>, if not"
+                                 " specified, defaults to the <backlog> list."
+                                 " If provided, -e will invoke $EDITOR,"
+                                 " allowing you to provide the new card's"
+                                 " description")))
         self.cmd.add('list', self.list,
                      help_text="- List all cards for the current list")
         self.cmd.add('show', self.show,
                      help_text="<card-id> - Show card fields")
-        self.cmd.add('move', self.move, help_text=("<card-id> <list-id>"
-                     "- Move card <card-id> to <list-id>"))
+        self.cmd.add('move', self.move,
+                     help_text=(("<card-id> (<list-alias> | list-id>)"
+                                 " - Move card <card-id> to the list specified"
+                                 " by either the <list-alias> or"
+                                 " <list-id>")))
 
     def add(self, args=None):
         if utils.debug:

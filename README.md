@@ -108,10 +108,10 @@ card <subcommand>
 help - Display help information
 list <subcommand>
 $ trellotool card help
-Available commands for card are: add, help, list
-add [-e] <card title> [<list>] - Add a new card to your list, defaults to <backlog> if not specified, optionally allowing you to edit the description of the new card
+Available commands for card are: add, help, list, move, show
+add [-e] <card title> [<list-alias> | <list-id>] - Add a new card to an optionally specified <list-alias> or <list-id>, if not specified, defaults to the <backlog> list. If provided, -e will invoke $EDITOR, allowing you to provide the new card's description
 help - Display help information
 list - List all cards for the current list
-$ trellotool card add
-[-e] <card title> [<list>] - Add a new card to your list, defaults to <backlog> if not specified, optionally allowing you to edit the description of the new card
+move <card-id> (<list-alias> | list-id>) - Move card <card-id> to the list specified by either the <list-alias> or <list-id>
+show <card-id> - Show card fields
 ```
