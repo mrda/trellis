@@ -19,6 +19,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 # Or try here: http://www.fsf.org/copyleft/gpl.html
 
+import re
+
 import prettytable
 
 from trellotool import command
@@ -117,32 +119,24 @@ class TrelloList:
         if utils.debug:
             print("Invoking list.set with {}".format(args))
         if len(args) != 1:
-            print("Error: 'set' takes one parameter, the list name or id")
+            print(("Error: 'get' takes one parameter, the list name,"
+                   "list alias or id"))
             return
-        if args[0] not in TrelloList.allowed_default_list:
-            print("Error: list needs be be on of {}".format(", ".join("'{}'"
-                  .format(a) for a in TrelloList.allowed_default_list)))
-            return
+
         try:
-            list_category = args[0]
-            if list_category == 'in_progress':
-                list_meta = config.get_in_progress_list()
-            elif list_category == 'todo':
-                list_meta = config.get_todo_list()
-            elif list_category == 'backlog':
-                list_meta = config.get_backlog_list()
+            board_meta = config.get_default_board()
+            board_obj = trello_if.get_board(board_meta[0])
+
+            thing = args[0]
+
+            tlist = TrelloList.find_list(args[0], board_obj)
+            if tlist is None:
+                print("Could not find unique list '{}'".format(args[0]))
             else:
-                print("Error: Unknown default list category")
-                return
-
-            if list_meta is None or list_meta[0] is None:
-                print("Error: No such default list defined")
-                return
-
-            print(' '.join("'{}'".format(f) for f in list_meta))
+                print("'{}' '{}'".format(tlist.id, tlist.name))
 
         except Exception as e:
-            print("Error: Could not get default list ({})".format(e))
+            print("Error: Could not get list ({})".format(e))
 
     def list(self, args=None):
         if utils.debug:
@@ -159,10 +153,49 @@ class TrelloList:
             for f in table.field_names:
                 table.align[f] = 'l'
 
-            for lst in board_obj.all_lists():
-                if not lst.closed:
-                    table.add_row([lst.id, lst.name])
+            for tlist in trello_if.get_lists(board_obj):
+                if not tlist.closed:
+                    table.add_row([tlist.id, tlist.name])
             print("Board: {}".format(board_meta[1]))
             print(table)
         except Exception as e:
             print("Error: Could not list all lists for board ({})".format(e))
+
+    def find_list(thing, board_obj):
+        """Find a list by pattern matching on name or id or alias"""
+        try:
+            tlist_id = None
+            if thing in TrelloList.allowed_default_list:
+                tlist_id = config.get_list_id_by_name(thing)
+
+            if tlist_id is None:
+                # i.e. it's not an alias
+
+                all_tlists_for_board = trello_if.get_lists(board_obj)
+
+                thing_pattern = re.compile(".*{}.*".format(thing),
+                                           re.IGNORECASE)
+
+                candidates = []
+                for tlist in trello_if.get_lists(board_obj):
+                    if thing_pattern.match(tlist.name):
+                        if utils.debug:
+                            print("{} matches".format(tlist.name))
+                        candidates.append(tlist.id)
+
+                if len(candidates) == 1:
+                    tlist_id = candidates[0]
+                elif len(candidates) > 1:
+                    if utils.debug:
+                        print("*** Multiple matches for {}".format(thing))
+
+            if tlist_id is None:
+                # i.e. Must be an id by itself
+                tlist_id = thing
+
+            return trello_if.get_list(tlist_id)
+
+        except Exception as e:
+            if utils.debug:
+                print("*** Could not find list from {} ({})".format(thing, e))
+            return None

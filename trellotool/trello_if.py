@@ -84,7 +84,12 @@ def get_list(list_id):
     return client.get_list(list_id)
 
 
+def get_lists(board_obj):
+    return board_obj.all_lists()
+
+
 def get_cards(list_id):
+    # TODO(mrda): We should be using the paging interface here
     tlist = client.get_list(list_id)
     return tlist.list_cards()
 

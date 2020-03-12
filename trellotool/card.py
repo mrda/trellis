@@ -140,23 +140,15 @@ class Card:
             if args is None:
                 print("--- No list specified, defaulting to 'In Progress'")
                 curr_list_id = config.get_in_progress_list()[0]
-            elif (len(args) != 1 or
-                  args[0] not in trellolist.TrelloList.allowed_default_list):
 
-                print("Error: You need to provide a list name, one of {}"
-                      .format(", ".join("'{}'".format(a) for a in
-                              trellolist.TrelloList.allowed_default_list)))
-                return
-            elif args[0] == "in_progress":
-                curr_list_id = config.get_in_progress_list()[0]
-            elif args[0] == "todo":
-                curr_list_id = config.get_todo_list()[0]
-            elif args[0] == "backlog":
-                curr_list_id = config.get_backlog_list()[0]
+            board_obj = trello_if.get_board(config.get_default_board()[0])
+            curr_list = trellolist.TrelloList.find_list(args[0], board_obj)
 
-            if curr_list_id is None:
-                print("Error: Could not access list.  Have you set it?")
+            if curr_list is None:
+                print("Error: couldn't find unique list {}".format(args[0]))
                 return
+
+            curr_list_id = curr_list.id
 
             table = prettytable.PrettyTable()
             table.field_names = ['id', 'name', 'due', 'due complete',
@@ -229,23 +221,32 @@ class Card:
                 self.cmd.usage_for_cmd('move')
                 return
 
+            card_thing = args[0]
+            tlist_thing = args[1]
+
+            # Ensure the card identifier is valid
             try:
-                card = trello_if.get_card(args[0])
+                card = trello_if.get_card(card_thing)
             except Exception as e:
-                print("Error: Could not move card. Invalid card id.")
-                self.cmd.usage_for_cmd('move')
+                print("Error: Could not move card. Invalid card id {}"
+                      .format(card_thing))
+                if utils.debug:
+                    print("Exception: {}".format(e))
                 return
 
+            # Ensure the list identifier is valid
             try:
-                # Allow aliasing on common lists
-                tlist = args[1]
-                if tlist in trellolist.TrelloList.allowed_default_list:
-                    tlist = config.get_list_id_by_name(tlist)
-                tlist = trello_if.get_list(tlist)
+                board_obj = trello_if.get_board(config.get_default_board()[0])
+                tlist = trellolist.TrelloList.find_list(tlist_thing, board_obj)
+                if tlist is None:
+                    print("Error: Could not move card. Invalid list id '{}'"
+                          .format(tlist_thing))
+                    return
             except Exception as e:
-                print("Error: Could not move card. Invalid list id.({})"
-                      .format(e))
-                self.cmd.usage_for_cmd('move')
+                print("Error: Could not move card. Invalid list '{}'"
+                      .format(tlist_thing))
+                if utils.debug:
+                    print("Exception: {}".format(e))
                 return
 
             if utils.debug:

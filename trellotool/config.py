@@ -158,3 +158,15 @@ def get_list_id_by_name(name):
             # Some elements won't have the required fields, so we can just skip
             pass
     return None
+
+
+def get_list_meta_by_name(name):
+    _load()
+    for elem in _data:
+        try:
+            if elem == name:
+                return _data[elem]['id'], _data[elem]['name']
+        except Exception as e:
+            # Some elements won't have the required fields, so we can just skip
+            pass
+    return None, None
