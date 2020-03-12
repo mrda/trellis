@@ -65,6 +65,8 @@ class Card:
                      help_text="- List all cards for the current list")
         self.cmd.add('show', self.show,
                      help_text="<card-id> - Show card fields")
+        self.cmd.add('move', self.move, help_text=("<card-id> <list-id>"
+                     "- Move card <card-id> to <list-id>"))
 
     def add(self, args=None):
         if utils.debug:
@@ -210,3 +212,40 @@ class Card:
 
         except Exception as e:
             print("Error: Could not show card ({})".format(e))
+
+    def move(self, args=None):
+        if utils.debug:
+            print("Invoking card.move with {}".format(args))
+
+        try:
+            if args is None or len(args) != 2:
+                print("Error: No card or list specified")
+                self.cmd.usage_for_cmd('move')
+                return
+
+            try:
+                card = trello_if.get_card(args[0])
+            except Exception as e:
+                print("Error: Could not move card. Invalid card id.")
+                self.cmd.usage_for_cmd('move')
+                return
+
+            try:
+                # Allow aliasing on common lists
+                tlist = args[1]
+                if tlist in trellolist.TrelloList.allowed_default_list:
+                    tlist = config.get_list_id_by_name(tlist)
+                tlist = trello_if.get_list(tlist)
+            except Exception as e:
+                print("Error: Could not move card. Invalid list id.({})"
+                      .format(e))
+                self.cmd.usage_for_cmd('move')
+                return
+
+            if utils.debug:
+                print("Moving card '{}' to '{}'".format(card.name, tlist.name))
+
+            card.change_list(tlist.id)
+
+        except Exception as e:
+            print("Error: Could not move card ({})".format(e))
