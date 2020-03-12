@@ -1,4 +1,3 @@
-Move cards between lists, with error checking "trellotool card move <uuid> <list>"
 Archive cards "trellotool card archive <uuid>"
 Display labels on cards "trellotool card show <uuid>"
 Display attachments on cards "trellotool card show attachments <uuid>"
