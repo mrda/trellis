@@ -5,7 +5,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='trellotool',
-    version='0.0.3',
+    version='0.0.4',
     licence='GNU General Public License v3',
     author='Michael Davies',
     author_email='michael@the-davies.net',
@@ -14,7 +14,7 @@ setuptools.setup(
         "prettytable",
         "py-trello",
     ],
-    download_url='https://github.com/mrda/trellotool/archive/0.0.3.tar.gz',
+    download_url='https://github.com/mrda/trellotool/archive/0.0.4.tar.gz',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/mrda/trellotool',
