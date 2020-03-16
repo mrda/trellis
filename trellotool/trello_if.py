@@ -35,35 +35,8 @@ def check_credentials():
 
     global client
 
-    api_key = os.environ.get("TRELLO_API_KEY")
-    api_secret = os.environ.get("TRELLO_API_SECRET")
-    err = False
-
-    cmd = os.path.basename(sys.argv[0])
-
-    if api_key is None:
-        print("{}: You need to have the env variable TRELLO_API_KEY set"
-              .format(cmd))
-        print("You can get this from visiting https://trello.com/app-key and "
-              "copying the key")
-        print("into your shell, like this, 'export TRELLO_API_KEY=sjkfhksdhf"
-              "jksdhfkjsdhfk'")
-        print()
-        err = True
-
-    if api_secret is None:
-        print("{}: You need to have the env variable TRELLO_API_SECRET set"
-              .format(cmd))
-        print("You can get this from visiting https://trello.com/app-key, "
-              "generating a Token")
-        print("and copy that into your shell, like this,"
-              "'export TRELLO_API_SECRET=dkfjg9045jgl'")
-        print()
-        err = True
-
-    if err:
-        print("Exiting...")
-        sys.exit(1)
+    # get_credentials() will exit() if it can't be satisfied
+    api_key, api_secret = config.get_credentials()
 
     client = TrelloClient(
         api_key=api_key,

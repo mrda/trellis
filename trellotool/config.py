@@ -27,13 +27,16 @@ import os
 import pathlib
 import sys
 
+from trellotool import utils
+
 
 DEFAULT_BOARD = 'default_board'
 
 BACKLOG_LIST = 'backlog'
 TODO_LIST = 'todo'
 IN_PROGRESS_LIST = 'in_progress'
-
+TRELLO_API_KEY = 'TRELLO_API_KEY'
+TRELLO_API_SECRET = 'TRELLO_API_SECRET'
 LAST_MODIFIED = 'last-modified'
 
 _user = os.environ.get('USER')
@@ -61,6 +64,8 @@ def _load():
         _init()
         with open(_filename, "r") as f:
             _data = json.load(f)
+        if utils.debug:
+            print(_data)
     except IOError:
         pass
 
@@ -75,6 +80,65 @@ def _save():
             json.dump(_data, f, indent=4)
     except IOError:
         print("Can't save {}".format(_filename))
+
+
+def get_credentials():
+    """Return back the credentials to access Trello"""
+    global _data
+    _load()
+
+    # First, check to see if we can get the credentials from
+    # environment variables
+    api_key = os.environ.get("TRELLO_API_KEY")
+    api_secret = os.environ.get("TRELLO_API_SECRET")
+
+    # If that didn't work, we try from the config file
+    if api_key is None:
+        try:
+            api_key = _data[TRELLO_API_KEY]
+        except KeyError:
+            # Allow for an in place upgrade
+            _data[TRELLO_API_KEY] = ""
+            _save()
+
+    if api_secret is None:
+        try:
+            api_secret = _data[TRELLO_API_SECRET]
+        except KeyError:
+            # Allow for an in place upgrade
+            _data[TRELLO_API_SECRET] = ""
+            _save()
+
+    cmd = os.path.basename(sys.argv[0])
+    err = False
+
+    if api_key is None or api_key == "":
+        print("{}: You need to have TRELLO_API_KEY set in either an"
+              .format(cmd))
+        print("environment variable, or in the config file.")
+        print("You can obtain this from visiting https://trello.com/app-key"
+              " and copying the key")
+        print("into your shell, like this, 'export TRELLO_API_KEY=sjkfhksdhf"
+              "jksdhfkjsdhfk'")
+        print()
+        err = True
+
+    if api_secret is None or api_secret == "":
+        print("{}: You need to have TRELLO_API_SECRET set in either an"
+              .format(cmd))
+        print("environment variable, or in the config file.")
+        print("You can obtain this from visiting https://trello.com/app-key"
+              " and generating a Token")
+        print("and copy that into your shell, like this,"
+              "'export TRELLO_API_SECRET=dkfjg9045jgl'")
+        print()
+        err = True
+
+    if err:
+        print("Exiting...")
+        sys.exit(1)
+
+    return api_key, api_secret
 
 
 def set(field, data):
