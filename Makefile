@@ -19,12 +19,26 @@
 # 02111-1307, USA.
 #
 
+VENV=${HOME}/venv3
 NOSE=nosetests
 GIT_CHANGES=$(shell git ls-files -m)
 
 .PHONY: all tests clean check changes cover install uninstall
 
-all: check tests changes
+all: dev
+
+dev: check-env check tests changes
+
+$(VENV):
+	python3 -m venv $(VENV)
+
+check-env: $(VENV)
+	@if [ "z$(VIRTUAL_ENV)" = "z" ]; then \
+        printf "\nPlease start your virtualenv first,\nlike this "; \
+        printf "'. $(VENV)/bin/activate'\n"; \
+        printf "Then enter your 'make' command again\n\n"; \
+        exit 1; \
+    else true; fi
 
 install:
 	pip install --user -Ur requirements.txt .
